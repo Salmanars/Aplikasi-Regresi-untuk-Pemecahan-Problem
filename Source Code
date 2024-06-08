@@ -1,0 +1,84 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+from scipy.optimize import curve_fit
+from google.colab import files
+
+# Unggah file CSV
+uploaded = files.upload()
+
+# Baca data dari file CSV yang diunggah
+data = pd.read_csv(next(iter(uploaded)))
+
+# Ambil kolom 'Hours Studied' (TB) dan 'Performance Index' (NT)
+TB = data['Hours Studied'].values.reshape(-1, 1)
+NT = data['Performance Index'].values
+
+# Metode 1: Model Linear
+linear_model = LinearRegression()
+linear_model.fit(TB, NT)
+NT_pred_linear = linear_model.predict(TB)
+
+# Plot hasil regresi linear
+plt.figure(figsize=(12, 6))
+plt.scatter(TB, NT, color='blue', label='Data Asli')
+plt.plot(TB, NT_pred_linear, color='red', label='Regresi Linear')
+plt.xlabel('Durasi Waktu Belajar (TB)')
+plt.ylabel('Nilai Ujian (NT)')
+plt.title('Regresi Linear: Durasi Waktu Belajar vs Nilai Ujian')
+plt.legend()
+plt.show()
+
+# Hitung galat RMS untuk model linear
+rms_linear = np.sqrt(mean_squared_error(NT, NT_pred_linear))
+print(f'Galat RMS (Model Linear): {rms_linear}')
+
+# Metode 2: Model eksponensial
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+from sklearn.metrics import mean_squared_error
+import pandas as pd
+
+# Misalkan TB dan NT sudah didefinisikan, berikut adalah contoh data
+# TB: Durasi Waktu Belajar
+# NT: Nilai Ujian
+TB = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+NT = np.array([1.2, 1.9, 3.1, 4.0, 5.1, 6.0, 7.2, 8.3, 9.1, 10.5])
+
+# Fungsi eksponensial
+def exponential_model(x, a, b):
+    return a * np.exp(b * x)
+
+# Menggunakan curve_fit untuk model eksponensial
+params_exp, covariance_exp = curve_fit(exponential_model, TB.flatten(), NT)
+NT_pred_exp = exponential_model(TB, *params_exp)
+
+# Plot hasil regresi eksponensial
+plt.figure(figsize=(12, 6))
+plt.scatter(TB, NT, color='blue', label='Data Asli')
+plt.plot(TB, NT_pred_exp, color='red', label='Regresi Eksponensial')
+plt.xlabel('Durasi Waktu Belajar (TB)')
+plt.ylabel('Nilai Ujian (NT)')
+plt.title('Regresi Eksponensial: Durasi Waktu Belajar vs Nilai Ujian')
+plt.legend()
+plt.show()
+
+# Hitung galat RMS untuk model eksponensial
+rms_exp = np.sqrt(mean_squared_error(NT, NT_pred_exp))
+print(f'Galat RMS (Model Eksponensial): {rms_exp}')
+
+# Buat tabel untuk menampilkan hasil regresi eksponensial
+data = {
+    'Durasi Waktu Belajar (TB)': TB,
+    'Nilai Ujian Asli (NT)': NT,
+    'Prediksi Nilai Ujian (NT_pred_exp)': NT_pred_exp
+}
+df = pd.DataFrame(data)
+print(df)
+
+# Menampilkan tabel di Colab
+from google.colab import data_table
+data_table.DataTable(df)
