@@ -1,0 +1,21 @@
+# Metode 2: Model Eksponensial
+def exponential_model(x, a, b):
+    return a * np.exp(b * x)
+
+# Fitting model eksponensial
+params_exp, covariance_exp = curve_fit(exponential_model, TB.flatten(), NT)
+NT_pred_exp = exponential_model(TB, *params_exp)
+
+# Plot hasil regresi eksponensial
+plt.figure(figsize=(12, 6))
+plt.scatter(TB, NT, color='blue', label='Data Asli')
+plt.plot(TB, NT_pred_exp, color='red', label='Regresi Eksponensial')
+plt.xlabel('Durasi Waktu Belajar (TB)')
+plt.ylabel('Nilai Ujian (NT)')
+plt.title('Regresi Eksponensial: Durasi Waktu Belajar vs Nilai Ujian')
+plt.legend()
+plt.show()
+
+# Hitung galat RMS untuk model eksponensial
+rms_exp = np.sqrt(mean_squared_error(NT, NT_pred_exp))
+print(f'Galat RMS (Model Eksponensial): {rms_exp}')
