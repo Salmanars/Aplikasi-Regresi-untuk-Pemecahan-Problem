@@ -1,0 +1,18 @@
+# Metode 1: Model Linear
+linear_model = LinearRegression()
+linear_model.fit(TB, NT)
+NT_pred_linear = linear_model.predict(TB)
+
+# Plot hasil regresi linear
+plt.figure(figsize=(12, 6))
+plt.scatter(TB, NT, color='blue', label='Data Asli')
+plt.plot(TB, NT_pred_linear, color='red', label='Regresi Linear')
+plt.xlabel('Durasi Waktu Belajar (TB)')
+plt.ylabel('Nilai Ujian (NT)')
+plt.title('Regresi Linear: Durasi Waktu Belajar vs Nilai Ujian')
+plt.legend()
+plt.show()
+
+# Hitung galat RMS untuk model linear
+rms_linear = np.sqrt(mean_squared_error(NT, NT_pred_linear))
+print(f'Galat RMS (Model Linear): {rms_linear}')
